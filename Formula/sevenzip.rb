@@ -7,7 +7,7 @@ class Sevenzip < Formula
   license all_of: ["LGPL-2.1-or-later", "BSD-3-Clause"]
 
   on_linux do
-    depends_on "gcc@9"
+    depends_on "gcc@9" => :build
   end
 
   def install
@@ -20,7 +20,10 @@ class Sevenzip < Formula
       end
 
       on_linux do
-        system "make", "CC=#{Formula["gcc@9"].opt_bin}/gcc-9", "CXX=#{Formula["gcc@9"].opt_bin}/g++-9", "-f", "../../cmpl_gcc.mak"
+        system "make", "CC=#{Formula["gcc@9"].opt_bin}/gcc-9",
+                       "CXX=#{Formula["gcc@9"].opt_bin}/g++-9",
+                       "LDFLAGS=-static -static-libgcc -static-libstdc++",
+                       "-f", "../../cmpl_gcc.mak"
 
         bin.install "b/g/7zz"
       end
